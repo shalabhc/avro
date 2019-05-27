@@ -29,55 +29,52 @@ from avro import schema
 
 
 def GetInteropSchema():
-  test_dir = os.path.dirname(os.path.abspath(__file__))
-  schema_json_path = os.path.join(test_dir, 'interop.avsc')
-  with open(schema_json_path, 'r') as f:
-    schema_json = f.read()
-  return schema.Parse(schema_json)
+    test_dir = os.path.dirname(os.path.abspath(__file__))
+    schema_json_path = os.path.join(test_dir, "interop.avsc")
+    with open(schema_json_path, "r") as f:
+        schema_json = f.read()
+    return schema.Parse(schema_json)
 
 
 INTEROP_SCHEMA = GetInteropSchema()
 INTEROP_DATUM = {
-    'intField': 12,
-    'longField': 15234324,
-    'stringField': 'hey',
-    'boolField': True,
-    'floatField': 1234.0,
-    'doubleField': -1234.0,
-    'bytesField': b'12312adf',
-    'nullField': None,
-    'arrayField': [5.0, 0.0, 12.0],
-    'mapField': {'a': {'label': 'a'}, 'bee': {'label': 'cee'}},
-    'unionField': 12.0,
-    'enumField': 'C',
-    'fixedField': b'1019181716151413',
-    'recordField': {
-        'label': 'blah',
-        'children': [{'label': 'inner', 'children': []}],
-    },
+    "intField": 12,
+    "longField": 15234324,
+    "stringField": "hey",
+    "boolField": True,
+    "floatField": 1234.0,
+    "doubleField": -1234.0,
+    "bytesField": b"12312adf",
+    "nullField": None,
+    "arrayField": [5.0, 0.0, 12.0],
+    "mapField": {"a": {"label": "a"}, "bee": {"label": "cee"}},
+    "unionField": 12.0,
+    "enumField": "C",
+    "fixedField": b"1019181716151413",
+    "recordField": {"label": "blah", "children": [{"label": "inner", "children": []}]},
 }
 
 
 def WriteDataFile(path, datum, schema):
-  datum_writer = io.DatumWriter()
-  with open(path, 'wb') as writer:
-    # NB: not using compression
-    with datafile.DataFileWriter(writer, datum_writer, schema) as dfw:
-      dfw.append(datum)
+    datum_writer = io.DatumWriter()
+    with open(path, "wb") as writer:
+        # NB: not using compression
+        with datafile.DataFileWriter(writer, datum_writer, schema) as dfw:
+            dfw.append(datum)
 
 
 class TestDataFileInterop(unittest.TestCase):
-  def testInterop(self):
-    with tempfile.NamedTemporaryFile() as temp_path:
-      WriteDataFile(temp_path.name, INTEROP_DATUM, INTEROP_SCHEMA)
+    def testInterop(self):
+        with tempfile.NamedTemporaryFile() as temp_path:
+            WriteDataFile(temp_path.name, INTEROP_DATUM, INTEROP_SCHEMA)
 
-      # read data in binary from file
-      datum_reader = io.DatumReader()
-      with open(temp_path.name, 'rb') as reader:
-        dfr = datafile.DataFileReader(reader, datum_reader)
-        for datum in dfr:
-          self.assertEqual(INTEROP_DATUM, datum)
+            # read data in binary from file
+            datum_reader = io.DatumReader()
+            with open(temp_path.name, "rb") as reader:
+                dfr = datafile.DataFileReader(reader, datum_reader)
+                for datum in dfr:
+                    self.assertEqual(INTEROP_DATUM, datum)
 
 
-if __name__ == '__main__':
-  raise Exception('Use run_tests.py')
+if __name__ == "__main__":
+    raise Exception("Use run_tests.py")

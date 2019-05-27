@@ -18,17 +18,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-__all__ = ('schema', 'io', 'datafile', 'protocol', 'ipc')
+__all__ = ("schema", "io", "datafile", "protocol", "ipc")
 
 
 import os
 
 
 def LoadResource(name):
-  dir_path = os.path.dirname(__file__)
-  rsrc_path = os.path.join(dir_path, name)
-  with open(rsrc_path, 'r') as f:
-    return f.read()
+    dir_path = os.path.dirname(__file__)
+    rsrc_path = os.path.join(dir_path, name)
+    with open(rsrc_path, "r") as f:
+        return f.read()
 
 
-VERSION = LoadResource('VERSION.txt').strip()
+VERSION = LoadResource("VERSION.txt").strip()

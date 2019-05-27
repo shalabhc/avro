@@ -22,14 +22,16 @@ import unittest
 
 from avro import schema
 
+
 class TestEnum(unittest.TestCase):
-  def testSymbolsInOrder(self):
-    enum = schema.EnumSchema('Test', '', ['A', 'B'], schema.Names(), '', {})
-    self.assertEqual('A', enum.symbols[0])
+    def testSymbolsInOrder(self):
+        enum = schema.EnumSchema("Test", "", ["A", "B"], schema.Names(), "", {})
+        self.assertEqual("A", enum.symbols[0])
 
-  def testSymbolsInReverseOrder(self):
-    enum = schema.EnumSchema('Test', '', ['B', 'A'], schema.Names(), '', {})
-    self.assertEqual('B', enum.symbols[0])
+    def testSymbolsInReverseOrder(self):
+        enum = schema.EnumSchema("Test", "", ["B", "A"], schema.Names(), "", {})
+        self.assertEqual("B", enum.symbols[0])
 
-if __name__ == '__main__':
-  raise Exception('Use run_tests.py')
+
+if __name__ == "__main__":
+    raise Exception("Use run_tests.py")
