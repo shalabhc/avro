@@ -97,13 +97,10 @@ Using simplejson.tool from the shell to validate and pretty-print::
     $ echo '{ 1.2:3.4}' | python -m simplejson.tool
     Expecting property name: line 1 column 2 (char 2)
 """
-__version__ = '2.0.9'
-__all__ = [
-    'dump', 'dumps', 'load', 'loads',
-    'JSONDecoder', 'JSONEncoder',
-]
+__version__ = "2.0.9"
+__all__ = ["dump", "dumps", "load", "loads", "JSONDecoder", "JSONEncoder"]
 
-__author__ = 'Bob Ippolito <bob@redivi.com>'
+__author__ = "Bob Ippolito <bob@redivi.com>"
 
 from decoder import JSONDecoder
 from encoder import JSONEncoder
@@ -115,13 +112,25 @@ _default_encoder = JSONEncoder(
     allow_nan=True,
     indent=None,
     separators=None,
-    encoding='utf-8',
+    encoding="utf-8",
     default=None,
 )
 
-def dump(obj, fp, skipkeys=False, ensure_ascii=True, check_circular=True,
-        allow_nan=True, cls=None, indent=None, separators=None,
-        encoding='utf-8', default=None, **kw):
+
+def dump(
+    obj,
+    fp,
+    skipkeys=False,
+    ensure_ascii=True,
+    check_circular=True,
+    allow_nan=True,
+    cls=None,
+    indent=None,
+    separators=None,
+    encoding="utf-8",
+    default=None,
+    **kw
+):
     """Serialize ``obj`` as a JSON formatted stream to ``fp`` (a
     ``.write()``-supporting file-like object).
 
@@ -163,27 +172,52 @@ def dump(obj, fp, skipkeys=False, ensure_ascii=True, check_circular=True,
 
     """
     # cached encoder
-    if (not skipkeys and ensure_ascii and
-        check_circular and allow_nan and
-        cls is None and indent is None and separators is None and
-        encoding == 'utf-8' and default is None and not kw):
+    if (
+        not skipkeys
+        and ensure_ascii
+        and check_circular
+        and allow_nan
+        and cls is None
+        and indent is None
+        and separators is None
+        and encoding == "utf-8"
+        and default is None
+        and not kw
+    ):
         iterable = _default_encoder.iterencode(obj)
     else:
         if cls is None:
             cls = JSONEncoder
-        iterable = cls(skipkeys=skipkeys, ensure_ascii=ensure_ascii,
-            check_circular=check_circular, allow_nan=allow_nan, indent=indent,
-            separators=separators, encoding=encoding,
-            default=default, **kw).iterencode(obj)
+        iterable = cls(
+            skipkeys=skipkeys,
+            ensure_ascii=ensure_ascii,
+            check_circular=check_circular,
+            allow_nan=allow_nan,
+            indent=indent,
+            separators=separators,
+            encoding=encoding,
+            default=default,
+            **kw
+        ).iterencode(obj)
     # could accelerate with writelines in some versions of Python, at
     # a debuggability cost
     for chunk in iterable:
         fp.write(chunk)
 
 
-def dumps(obj, skipkeys=False, ensure_ascii=True, check_circular=True,
-        allow_nan=True, cls=None, indent=None, separators=None,
-        encoding='utf-8', default=None, **kw):
+def dumps(
+    obj,
+    skipkeys=False,
+    ensure_ascii=True,
+    check_circular=True,
+    allow_nan=True,
+    cls=None,
+    indent=None,
+    separators=None,
+    encoding="utf-8",
+    default=None,
+    **kw
+):
     """Serialize ``obj`` to a JSON formatted ``str``.
 
     If ``skipkeys`` is false then ``dict`` keys that are not basic types
@@ -223,25 +257,47 @@ def dumps(obj, skipkeys=False, ensure_ascii=True, check_circular=True,
 
     """
     # cached encoder
-    if (not skipkeys and ensure_ascii and
-        check_circular and allow_nan and
-        cls is None and indent is None and separators is None and
-        encoding == 'utf-8' and default is None and not kw):
+    if (
+        not skipkeys
+        and ensure_ascii
+        and check_circular
+        and allow_nan
+        and cls is None
+        and indent is None
+        and separators is None
+        and encoding == "utf-8"
+        and default is None
+        and not kw
+    ):
         return _default_encoder.encode(obj)
     if cls is None:
         cls = JSONEncoder
     return cls(
-        skipkeys=skipkeys, ensure_ascii=ensure_ascii,
-        check_circular=check_circular, allow_nan=allow_nan, indent=indent,
-        separators=separators, encoding=encoding, default=default,
-        **kw).encode(obj)
+        skipkeys=skipkeys,
+        ensure_ascii=ensure_ascii,
+        check_circular=check_circular,
+        allow_nan=allow_nan,
+        indent=indent,
+        separators=separators,
+        encoding=encoding,
+        default=default,
+        **kw
+    ).encode(obj)
 
 
 _default_decoder = JSONDecoder(encoding=None, object_hook=None)
 
 
-def load(fp, encoding=None, cls=None, object_hook=None, parse_float=None,
-        parse_int=None, parse_constant=None, **kw):
+def load(
+    fp,
+    encoding=None,
+    cls=None,
+    object_hook=None,
+    parse_float=None,
+    parse_int=None,
+    parse_constant=None,
+    **kw
+):
     """Deserialize ``fp`` (a ``.read()``-supporting file-like object containing
     a JSON document) to a Python object.
 
@@ -261,14 +317,28 @@ def load(fp, encoding=None, cls=None, object_hook=None, parse_float=None,
     kwarg.
 
     """
-    return loads(fp.read(),
-        encoding=encoding, cls=cls, object_hook=object_hook,
-        parse_float=parse_float, parse_int=parse_int,
-        parse_constant=parse_constant, **kw)
+    return loads(
+        fp.read(),
+        encoding=encoding,
+        cls=cls,
+        object_hook=object_hook,
+        parse_float=parse_float,
+        parse_int=parse_int,
+        parse_constant=parse_constant,
+        **kw
+    )
 
 
-def loads(s, encoding=None, cls=None, object_hook=None, parse_float=None,
-        parse_int=None, parse_constant=None, **kw):
+def loads(
+    s,
+    encoding=None,
+    cls=None,
+    object_hook=None,
+    parse_float=None,
+    parse_int=None,
+    parse_constant=None,
+    **kw
+):
     """Deserialize ``s`` (a ``str`` or ``unicode`` instance containing a JSON
     document) to a Python object.
 
@@ -301,18 +371,24 @@ def loads(s, encoding=None, cls=None, object_hook=None, parse_float=None,
     kwarg.
 
     """
-    if (cls is None and encoding is None and object_hook is None and
-            parse_int is None and parse_float is None and
-            parse_constant is None and not kw):
+    if (
+        cls is None
+        and encoding is None
+        and object_hook is None
+        and parse_int is None
+        and parse_float is None
+        and parse_constant is None
+        and not kw
+    ):
         return _default_decoder.decode(s)
     if cls is None:
         cls = JSONDecoder
     if object_hook is not None:
-        kw['object_hook'] = object_hook
+        kw["object_hook"] = object_hook
     if parse_float is not None:
-        kw['parse_float'] = parse_float
+        kw["parse_float"] = parse_float
     if parse_int is not None:
-        kw['parse_int'] = parse_int
+        kw["parse_int"] = parse_int
     if parse_constant is not None:
-        kw['parse_constant'] = parse_constant
+        kw["parse_constant"] = parse_constant
     return cls(encoding=encoding, **kw).decode(s)

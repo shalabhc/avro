@@ -5,9 +5,9 @@
 # to you under the Apache License, Version 2.0 (the
 # "License"); you may not use this file except in compliance
 # with the License.  You may obtain a copy of the License at
-# 
+#
 # http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,6 +16,7 @@
 import unittest
 import csv
 from cStringIO import StringIO
+
 try:
     import json
 except ImportError:
@@ -41,14 +42,17 @@ except ImportError:
             raise ValueError
         return pipe.stdout.read()
 
+
 try:
     from subprocess import check_call
 except ImportError:
+
     def check_call(args, **kw):
         pipe = Popen(args, **kw)
         assert pipe.wait() == 0
 
-SCHEMA = '''
+
+SCHEMA = """
 {
     "namespace": "test.avro",
         "name": "LooneyTunes",
@@ -59,7 +63,7 @@ SCHEMA = '''
             {"name": "type", "type": "string"}
         ]
 }
-'''
+"""
 
 LOONIES = (
     ("daffy", "duck", "duck"),
@@ -71,17 +75,20 @@ LOONIES = (
     ("foghorn", "leghorn", "rooster"),
 )
 
+
 def looney_records():
     for f, l, t in LOONIES:
-        yield {"first": f, "last" : l, "type" : t}
+        yield {"first": f, "last": l, "type": t}
+
 
 SCRIPT = join(dirname(__file__), "..", "scripts", "avro")
 
-_JSON_PRETTY = '''{
+_JSON_PRETTY = """{
     "type": "duck", 
     "last": "duck", 
     "first": "daffy"
-}'''
+}"""
+
 
 def gen_avro(filename):
     schema = avro.schema.parse(SCHEMA)
@@ -92,8 +99,10 @@ def gen_avro(filename):
     writer.close()
     fo.close()
 
+
 def tempfile():
     return NamedTemporaryFile(delete=False).name
+
 
 class TestCat(unittest.TestCase):
     def setUp(self):
@@ -153,21 +162,21 @@ class TestCat(unittest.TestCase):
 
     def test_fields(self):
         # One field selection (no comma)
-        out = self._run('--fields', 'last')
-        assert json.loads(out[0]) == {'last': 'duck'}
+        out = self._run("--fields", "last")
+        assert json.loads(out[0]) == {"last": "duck"}
 
         # Field selection (with comma and space)
-        out = self._run('--fields', 'first, last')
-        assert json.loads(out[0]) == {'first': 'daffy', 'last': 'duck'}
+        out = self._run("--fields", "first, last")
+        assert json.loads(out[0]) == {"first": "daffy", "last": "duck"}
 
         # Empty fields should get all
-        out = self._run('--fields', '')
-        assert json.loads(out[0]) == \
-                {'first': 'daffy', 'last': 'duck', 'type': 'duck'}
+        out = self._run("--fields", "")
+        assert json.loads(out[0]) == {"first": "daffy", "last": "duck", "type": "duck"}
 
         # Non existing fields are ignored
-        out = self._run('--fields', 'first,last,age')
-        assert json.loads(out[0]) == {'first': 'daffy', 'last': 'duck'}
+        out = self._run("--fields", "first,last,age")
+        assert json.loads(out[0]) == {"first": "daffy", "last": "duck"}
+
 
 class TestWrite(unittest.TestCase):
     def setUp(self):
